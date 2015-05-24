@@ -10,3 +10,5 @@ then
     fi
 fi
 
+PS1=$OLDPS1
+

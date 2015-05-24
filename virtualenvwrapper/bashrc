@@ -1,10 +1,58 @@
+# .bashrc
+
+#trap 'echo "VARIABLE-TRACE> \$TMUX = \"$TMUX\""' DEBUG
+
+# User specific aliases and functions
+
+alias vi=/usr/bin/vim
+# Source global definitions
+#if [ -f /etc/bashrc ]; then
+#	. /etc/bashrc
+#fi
+
+PS1='\n\e[1m\e[31m\u\e[0m@\H\n[\w]\n:# '
+
+export EDITOR=/usr/local/bin/vim
+
+alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
+
+alias vm_restartdhcpd='sudo /Applications/VMware\ Fusion.app/Contents/Library/vmnet-cli --configure ;   
+sudo /Applications/VMware\ Fusion.app/Contents/Library/vmnet-cli --stop;   
+sudo /Applications/VMware\ Fusion.app/Contents/Library/vmnet-cli --start'  
+
+export VUNDLE_URI='https://github.com/gmarik/vundle.git -b v0.10.2'
+export PATH=$PATH:/usr/local/opt/go/libexec/bin
+export GOPATH=$HOME/work/go
+
+export PYFLAKES_BUILTINS='__opts__,__salt__,__grains__,__pillar__,request'
+
+
+
+colors(){
+    for i in {0..255} ; do
+        printf "\x1b[38;5;${i}mcolour${i}\n"
+    done
+}
+
+
 NATIVEPY='/usr/local/bin/python'
+[[ -d "$HOME/.local/bin" ]] && PATH=$HOME/.local/bin:$PATH
+
 VWRAP=/usr/local/bin/virtualenvwrapper.sh
 
-[[ -z $TMUX ]] && 
-    . $VWRAP ||
-    VIRTUALENVWRAPPER_PYTHON=$NATIVEPY && 
-    . $VWRAP
+export WORKON=$HOME/pyenv
 
-[[ -z $THIS ]] && workon ${THIS} && . $HOME/.virtualenvs/set_prompt
+if [[ -n $TMUX ]];
+then
+    VIRTUALENVWRAPPER_PYTHON=$NATIVEPY 
+    . $VWRAP 
+    [[ -n $VIRTUAL_ENV ]] && . $HOME/.virtualenvs/set_prompt
+else
+    . $VWRAP
+fi
+
+export DJANGO_SETTINGS_MODULE="revsys.settings.local"
+
+[[ -z "$THIS" ]] && workon ${THIS} && . $HOME/.virtualenvs/set_prompt
+export EDITOR=$( which vim )
 

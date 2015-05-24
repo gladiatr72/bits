@@ -2,6 +2,7 @@
 # This hook is sourced after every virtualenv is activated.
 
 OLDCURDIR=$PWD
+OLDPS1=$PS1
 
 PGVER='9.4'
 V="$HOME/.virtualenvs"
@@ -12,7 +13,7 @@ export H=$HOME/work/git/${THIS}
 [[ ! -f $HOME/work/git/$THIS/.nopg ]] &&
 if [[ -f $V/last_venv ]];
 then
-    [[ -n $THAT ]]  && export THAT=$( cat $V/last_venv ) 
+    [[ -n "$THAT" ]]  && export THAT=$( cat $V/last_venv ) 
     if [[ "$THIS" != "$THAT" ]];
     then
         if  [[ -f $V/PG/${THAT}/postmaster.pid ]];
@@ -38,12 +39,17 @@ then
     if [[ ! -f $PGDATA/postmaster.pid ]];
     then
         echo "starting postgres instance: $THIS"
-        pg_ctl start -l $PGDATA/postgres.log >& /dev/null
-
+        pg_ctl start -l $PGDATA/postgres.log 
+    else
+        if ! pgrunning;
+        then
+            rm -f $PGDATA/postmaster.pid
+            pg_ctl start -l $PGDATA/postgres.log
+        fi
     fi
 else
     initdb $PGDATA &&
-    pg_ctl start -w -l $PGDATA/postgres.log >& /dev/null
+    pg_ctl start -w -l $PGDATA/postgres.log 
     createuser  revsysuser &&
     createdb  -O revsysuser django &&
     createdb  $( whoami )
