@@ -1,0 +1,85 @@
+nmap <f2> :set number! number?<cr>
+nnoremap <F3>  :set invpaste paste?<cr>
+imap <F3> :TogglePaste
+
+""nmap <f12> :set invpaste paste?<cr>
+
+"nmap <C-f11> :SyntasticToggleMode<cr>
+"nmap <f11> :SyntasticCheck<cr>
+set pastetoggle=[24~
+unmap <C-E>
+
+
+set modeline
+set modelines=5
+set nobackup
+set autowrite
+
+
+let g:pymode_lint=1
+let g:loaded_modelines=1
+let g:acp_enableAtStartup = 1
+let g:spf13_no_omni_complete = 0
+let g:spf13_no_neosnippet_expand = 0
+
+let g:spf13_no_easyWindows = 1
+let g:spf13_clear_search_highdark = 1
+let g:SimpylFold_docstring_preview = 0
+let g:spf13_clear_search_highdark = 0
+
+let g:jedi#popup_on_dot = 0
+let g:jedi#show_call_signatures = 2
+let g:jedi#popup_select_first = 0
+let g:syntastic_enable_python_checker = 1
+let g:syntastic_python_checkers = ['pylint']
+
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 1
+
+
+let g:python_syntax_fold = 1
+let g:python_fold_strings = 0
+let g:python_docstring_in_foldtext = 1
+let g:python_check_syntax = 0
+let g:python_auto_complete_modules = 1
+
+let g:ycm_collect_identifiers_from_tags_files = 1
+
+
+set colorcolumn=80
+
+set nohlsearch
+set background=dark
+set mouse=""
+
+"UnBundle 'yssource/python.vim'
+"UnBundle 'python_match.vim'
+""UnBundle 'scrooloose/syntastic'
+"UnBundle 'osyo-manga/vim-over'
+"UnBundle 'Lokaltog/vim-easymotion'
+"UnBundle 'mhinz/vim-signify'
+"UnBundle 'gcmt/wildfire.vim'
+"UnBundle 'reedes/vim-litecorrect'
+"UnBundle 'reedes/vim-wordy'
+"UnBundle 'vim-snippets'
+"UnBundle 'SPF13/PIV'
+"UnBundle 'vim-php-namespace'
+"UnBundle 'vim-less'
+"UnBundle 'vim-coffee-script'
+"UnBundle 'vim-css3-syntax'
+"UnBundle 'vim-toml'
+"UnBundle 'tpope/vim-surround'
+UnBundle 'spf13/vim-autoclose'
+"UnBundle 'pythoncomplete'
+""UnBundle 'klen/python-mode'
+""UnBundle 'Shougo/neocomplcache'
+"UnBundle 'Shougo/neocomplete.vim.git'
+"UnBundle 'Shougo/neosnippet'
+"UnBundle 'Shougo/neosnippet-snippets'

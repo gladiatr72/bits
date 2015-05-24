@@ -1,0 +1,10 @@
+
+
+Bundle 'davidhalter/jedi-vim'
+Bundle 'Rykka/riv.vim'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'lepture/vim-jinja'
+Bundle 'ervandew/supertab'
+Bundle 'Tagbar'
+Bundle 'saltstack/salt-vim'
+Bundle 'Rykka/InstantRst'

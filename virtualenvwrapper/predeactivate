@@ -1,0 +1,12 @@
+#!/bin/bash
+# This hook is sourced before every virtualenv is deactivated.
+
+if [[ ! -f $H/.nopg ]] ;
+then
+    if [[ "$( fuser $H 2>&1 | cut -d":" -f2 )" == "" ]]
+    then
+        echo "stopping postgres instance: $THIS" &&
+        pg_ctl stop -m fast >& /dev/null
+    fi
+fi
+

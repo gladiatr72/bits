@@ -1,0 +1,57 @@
+#!/bin/bash
+# This hook is sourced after every virtualenv is activated.
+
+OLDCURDIR=$PWD
+
+PGVER='9.4'
+V="$HOME/.virtualenvs"
+
+export THIS=$( basename $VIRTUAL_ENV )
+export H=$HOME/work/git/${THIS}
+
+[[ ! -f $HOME/work/git/$THIS/.nopg ]] &&
+if [[ -f $V/last_venv ]];
+then
+    [[ -n $THAT ]]  && export THAT=$( cat $V/last_venv ) 
+    if [[ "$THIS" != "$THAT" ]];
+    then
+        if  [[ -f $V/PG/${THAT}/postmaster.pid ]];
+        then
+            echo "stopping postgres instance: $THAT"
+            pg_ctl stop -m fast -D $V/PG/$THAT >& /dev/null
+        fi
+        echo -n $THIS > $V/last_venv 
+    else
+        export THAT=$THIS
+    fi
+    echo -n $THIS > $V/last_venv
+    export THAT=$THIS
+else
+    echo -n $THIS > $V/last_venv
+fi &&
+
+
+export PGDATA="$V/PG/${THIS}" &&
+
+if [[ -d $PGDATA ]];
+then
+    if [[ ! -f $PGDATA/postmaster.pid ]];
+    then
+        echo "starting postgres instance: $THIS"
+        pg_ctl start -l $PGDATA/postgres.log >& /dev/null
+
+    fi
+else
+    initdb $PGDATA &&
+    pg_ctl start -w -l $PGDATA/postgres.log >& /dev/null
+    createuser  revsysuser &&
+    createdb  -O revsysuser django &&
+    createdb  $( whoami )
+fi
+
+
+[[ -f $V/set_prompt ]] && . $V/set_prompt
+
+[[ ! -d $H ]] && mkdir -p $H
+
+cd $H

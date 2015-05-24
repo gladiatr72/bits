@@ -1,0 +1,10 @@
+NATIVEPY='/usr/local/bin/python'
+VWRAP=/usr/local/bin/virtualenvwrapper.sh
+
+[[ -z $TMUX ]] && 
+    . $VWRAP ||
+    VIRTUALENVWRAPPER_PYTHON=$NATIVEPY && 
+    . $VWRAP
+
+[[ -z $THIS ]] && workon ${THIS} && . $HOME/.virtualenvs/set_prompt
+
