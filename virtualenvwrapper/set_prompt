@@ -7,7 +7,7 @@ pgrunning(){
 
     if [[ ! -z "$pgpid" ]];
     then
-        pcmd="$( basename $( ps  -o command  -p $pgpid | tail -n 1 ))"
+        pcmd="$( basename $( ps  -o command  -p $pgpid | tail -n 1  | cut -d" " -f1))"
 
         if [[ "$pcmd" == "postgres" ]];
         then

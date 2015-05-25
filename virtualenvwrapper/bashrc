@@ -10,7 +10,15 @@ alias vi=/usr/bin/vim
 #	. /etc/bashrc
 #fi
 
-PS1='\n\e[1m\e[31m\u\e[0m@\H\n[\w]\n:# '
+PS1='\n\e[2m\e[32m\u\e[0m@\H\n[\w]\n:# '
+
+if [[ -d $HOME/u/run ]];
+then
+    PATH=$( find -L $HOME/u/run -type d -name "bin" -or -name "sbin" | tr '\n' ':'| sed -e 's/:$//'):$PATH
+    export MANPATH=$( find -L $HOME/u/run -type d -name "man" | tr '\n' ':' | sed -e 's/:$//')$MANPATH
+    export LD_LIBRARY_PATH=$( find -L $HOME/u/run -type d -name "lib" | tr '\n' ':' | sed -e 's/:$//' )$LD_LIBRARY_PATH
+fi
+
 
 export EDITOR=/usr/local/bin/vim
 
@@ -21,7 +29,7 @@ sudo /Applications/VMware\ Fusion.app/Contents/Library/vmnet-cli --stop;
 sudo /Applications/VMware\ Fusion.app/Contents/Library/vmnet-cli --start'  
 
 export VUNDLE_URI='https://github.com/gmarik/vundle.git -b v0.10.2'
-export PATH=$PATH:/usr/local/opt/go/libexec/bin
+export PATH=$HOME/bin:/usr/local/bin:$PATH:/usr/local/opt/go/libexec/bin
 export GOPATH=$HOME/work/go
 
 export PYFLAKES_BUILTINS='__opts__,__salt__,__grains__,__pillar__,request'
@@ -46,6 +54,7 @@ if [[ -n $TMUX ]];
 then
     VIRTUALENVWRAPPER_PYTHON=$NATIVEPY 
     . $VWRAP 
+
     [[ -n $VIRTUAL_ENV ]] && . $HOME/.virtualenvs/set_prompt
 else
     . $VWRAP
@@ -53,6 +62,9 @@ fi
 
 export DJANGO_SETTINGS_MODULE="revsys.settings.local"
 
-[[ -z "$THIS" ]] && workon ${THIS} && . $HOME/.virtualenvs/set_prompt
+[[ -n "$THIS" ]] && workon ${THIS} && . $HOME/.virtualenvs/set_prompt
+
 export EDITOR=$( which vim )
+
+
 
