@@ -1,0 +1,109 @@
+# vim: ft=sh
+
+export THIS=$( basename $VIRTUAL_ENV )
+export H=$HOME/work/git/${THIS}
+export HSOCK="$H/.app.sock"
+export TMUXBIN=$( which tmux )
+
+start_uwsgi(){
+    if [[ -n $1 ]];
+    then
+        VENV=$( dirname $VIRTUAL_ENV )/$1
+        H_=$( dirname $H )/$1
+        HSOCK_=${H_}/.app.sock
+    else
+        VENV=$VIRTUAL_ENV
+        H_=${H}
+        HSOCK_=${HSOCK}
+    fi
+
+    [[ -f ${H_}/.env ]] && . ${H}/.env 
+
+    uwsgi --virtualenv ${VENV} -s ${HSOCK_} --chdir ${H_} -w django_wsgi --pp bin >& ${VENV}/uwsgi.log &
+    err=$?
+    disown
+    return $err
+}
+
+start_pg(){
+    if [[ -n $1 ]];
+    then
+        VENV=$1 
+        PGD=$( dirname ${VIRTUAL_ENV} )/PG/${VENV}
+    else
+        PGD=${PGDATA}
+    fi
+    postgres -D ${PGD} -k ${PGD} -c listen_addresses='' >& ${PGD}/postgres.log &
+    err=$?
+    disown
+    return $err
+}
+
+stop_pg(){
+    if [[ -n $1 ]];
+    then
+        VENV=$1 
+        PGD=$( dirname ${VIRTUAL_ENV} )/PG/${VENV}
+    else
+        VENV=${THIS}
+        PGD=${PGDATA}
+    fi
+
+    echo "stopping postgres instance: $VENV" &&
+        [[ -f ${PGDATA}/postmaster.pid ]] &&
+        kill -2 $( cat ${PGD}/postmaster.pid | head -n 1 )
+}
+
+
+uwsgi_running(){
+    [[ -S ${HSOCK} ]] &&
+    if [[ "$( fuser ${HSOCK} )" != "" ]];
+    then
+        return 0
+    else
+        return 1
+    fi || return 1
+}
+
+
+pgrunning(){
+    PGD=$PGDATA
+
+    [[ -f $PGD/postmaster.pid ]] &&
+        pgpid=$( cat $PGD/postmaster.pid | head -n 1 ) ||
+        unset pgpid
+
+    if [[ ! -z "${pgpid}" ]];
+    then
+        pcmd="$( basename $( ps  -o command  -p ${pgpid} | tail -n 1  | cut -d" " -f1))"
+
+        if [[ "${pcmd}" == "postgres" ]];
+        then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+pidis(){
+    pid = $1
+    [[ "${pid}" == "" ]] && return 1
+
+    pid_owner=$( ps -o comm -p ${pid} | tail -n 1 )
+
+    echo pid_owner
+    return 0
+}
+
+tmux(){
+    if [[ -n $THIS ]];
+    then
+        TMSOCK="-S /tmp/${THIS}.tmux.soc"
+        args=$( echo $@ | sed -e 's/^.*tmux //' )
+        cmd="${TMUXBIN} ${TMSOCK} ${args}"
+        eval "$cmd"
+    fi
+}
+
+
+[[ -f $H/.env ]] && . $H/.env

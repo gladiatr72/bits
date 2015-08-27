@@ -1,0 +1,6 @@
+#!/bin/bash
+# This hook is run before every virtualenv is activated.
+# argument: environment name
+
+#!/bin/bash
+# This hook is sourced after every virtualenv is activated.

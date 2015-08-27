@@ -1,0 +1,25 @@
+
+pgrunning(){
+    [[ -f $PGDATA/postmaster.pid ]] &&
+        pgpid=$( cat $PGDATA/postmaster.pid | head -n 1 )
+
+    if [[ -n $pgpid ]];
+    then
+        pcmd=basename $( ps  -o command  -p $pgpid | tail -n 1 )
+
+        if [[ "pcmd" == "postgres" ]];
+        then
+            return 1
+        fi
+    fi
+
+    return 0
+}
+
+ps1update(){
+        pgrunning && STATUS="postgres active" || STATUS=""
+
+        OPS1=$( sed -Ene "/^PS1/s/^.*=['\\\"](.*)['\\\"]/\1/p" $HOME/.bashrc )
+        PS1="\n(\[\033[4;34m\]${THIS}\[\033[0m\]) (($STATUS))${OPS1}"
+}
+

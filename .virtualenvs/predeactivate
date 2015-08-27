@@ -1,13 +1,17 @@
 #!/bin/bash
 # This hook is sourced before every virtualenv is deactivated.
 
+. $V/libvw
+
 unset PROMPT_COMMAND
 cd $OLDCURDIR
 export PS1=$OLDPS1
 
+
 if [[ ! -f $H/.nopg ]] ;
 then
     anyone=$( fuser $H 2> /dev/null | cut -d":" -f2 )
+
     if [[ "$anyone" == "" ]];
     then
         echo "stopping postgres instance: $THIS" &&

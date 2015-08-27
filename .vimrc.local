@@ -1,0 +1,155 @@
+nnoremap <f2> :set number! number?<cr>
+nnoremap <F3>  :set invpaste paste?<cr>
+
+
+set encoding=utf-8 " Necessary to show Unicode glyphs
+
+let g:Powerline_symbols = 'fancy'
+
+" set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
+set guifont=Inconsolata-dz\ for\ Powerline:h18
+
+python import sys; sys.path.append('/usr/local/lib/python2.7/site-packages/')
+"python from powerline.vim import setup as powerline_setup
+"python powerline_setup()
+"python del powerline_setup
+
+let g:airline#extensions#tabline#enabled=1
+
+" set laststatus=2 " Always display the statusline in all windows
+set showtabline=0 " Always display the tabline, even if there is only one tab
+set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
+
+let g:airline_theme='ubaryd'
+
+
+""nmap <f12> :set invpaste paste?<cr>
+
+"nmap <C-f11> :SyntasticToggleMode<cr>
+"nmap <f11> :SyntasticCheck<cr>
+
+map <leader>nt <plug>NERDTreeTabsToggle<CR>
+
+set pastetoggle=[24~
+unmap <C-E>
+
+" generic settings
+set encoding=utf8
+set magic
+set lazyredraw
+set wildmenu
+set nobackup
+set autowrite
+set ic
+set smartcase
+set noautowrite
+
+nmap lb :set background=light<cr>
+nmap lbn :set background=dark<cr>
+
+let g:pymode_lint=0
+"let g:loaded_modelines=1
+let g:acp_enableAtStartup = 1
+let g:spf13_no_omni_complete = 0
+let g:spf13_no_neosnippet_expand = 0
+
+let g:spf13_no_easyWindows = 1
+let g:spf13_clear_search_highdark = 1
+" let g:SimpylFold_docstring_preview = 0
+let g:spf13_clear_search_highdark = 0
+
+" let g:jedi#popup_on_dot = 0
+" let g:jedi#show_call_signatures = 1
+" let g:jedi#popup_select_first = 0
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#bufferline#overwrite_variables = 1
+let g:airline#extensions#tabline#show_tab_nr = 2
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline#extensions#tabline#excludes = ['\.pyc']
+
+
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+
+
+
+
+
+
+
+" let g:syntastic_ignore_files = ['\.py$']
+" let g:syntastic_enable_python_checker = 1
+" let g:syntastic_python_checkers = ['pylint']
+" let g:syntastic_always_populate_loc_list = 0
+" let g:syntastic_auto_loc_list = 0
+" let g:syntastic_check_on_open = 0
+" let g:syntastic_check_on_wq = 1
+" let g:syntastic_id_checkers = 1
+" let g:syntastic_cursor_column=0
+
+
+" let g:python_syntax_fold = 1
+" let g:python_fold_strings = 0
+" let g:python_docstring_in_foldtext = 0
+" let g:python_check_syntax = 0
+" let g:python_auto_complete_modules = 0
+" let g:pymode_rope = 0
+" let g:pymode_rope_goto_definition_bind = "<C-]>"
+
+
+let g:pymode_lint_checkers = ['pylint']
+let g:pymode_lint_options_pylint = {'max-line-length': 100}
+
+let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from Ctags file
+let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
+let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
+"let g:ycm_complete_in_comments = 1 " Completion in comments
+"let g:ycm_complete_in_strings = 1 " Completion in string
+
+"let g:eastytags_async = 1
+"let g:easytags_resolve_links = 1
+
+" left
+"nmap [1;5D <C-w>h
+nmap [D <C-w>h
+" right
+"nmap [1;5C <C-w>l
+nmap [C <C-w>l
+" up
+"nmap [1;5A  <C-w>k
+nmap [A  <C-w>k
+" down
+"nmap [1;5B <C-w>j
+nmap [B <C-w>j
+
+" move to top
+nmap [1;9A <C-w>K
+" move down
+nmap [1;9B <C-w>J
+" move left
+nmap [1;9D <C-w>H
+" move right
+nmap [1;9C <C-w>L
+
+set mouse=nvir
+set ttyfast
+set ttymouse=xterm2
+set colorcolumn=80
+
+nmap <F5> :GundoToggle<CR>
+
+
+set nohlsearch
+set background=dark
+set title
+
+set wildignore=*.swp,*.pyc

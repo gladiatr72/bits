@@ -1,0 +1,17 @@
+
+. $V/libvw
+
+
+ps1update(){
+    pgrunning && STATUS="\033[;37m*" || STATUS=""
+
+    OPS1=$( sed -Ene "/^PS1/s/^.*=['\\\"](.*)['\\\"]/\1/p" $HOME/.bashrc )
+    echo -ne "\033]0;${THIS}--${HOSTNAME%%.*}: ${PWD/#$HOME/~}\007"
+
+    PS1="\n(\[\033[4;34m\]${THIS}\[\033[0m\])$STATUS${OPS1}"
+}
+
+pgrunning && STATUS="postgres active" || STATUS=""
+export STATUS
+
+PROMPT_COMMAND=ps1update

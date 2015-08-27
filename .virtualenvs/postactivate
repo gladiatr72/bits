@@ -8,10 +8,9 @@ OLDCURDIR=$PWD
     OLDPS1=$PS1
 
 PGVER='9.4'
-V="$HOME/.virtualenvs"
 
-export THIS=$( basename $VIRTUAL_ENV )
-export H=$HOME/work/git/${THIS}
+export V="$HOME/.virtualenvs"
+. $V/libvw
 
 [[ ! -f $HOME/work/git/$THIS/.nopg ]] &&
 if [[ -f $V/last_venv ]];
@@ -22,7 +21,7 @@ then
         if  [[ -f $V/PG/${THAT}/postmaster.pid ]];
         then
             echo "stopping postgres instance: $THAT"
-            kill -2 $( $V/PG/${THAT}/postmaster.pid )
+            stop_pg $THAT
         fi
         echo -n $THIS > $V/last_venv 
     else
@@ -42,26 +41,34 @@ then
     if [[ ! -f $PGDATA/postmaster.pid ]];
     then
         echo "starting postgres instance: $THIS"
-        postgres -D $PGDATA -k $PGDATA >& $PGDATA/postgres.log &
+        start_pg $THIS
     else
-        if ! pgrunning;
+        if [[ ! pgrunning ]];
         then
-            rm -f $PGDATA/postmaster.pid
-            nohup postgres -k $PGDATA -D $PGDATA >& $PGDATA/postgres.log &
+            mv $PGDATA/postmaster.pid $PGDATA/postmaster.pid_ 
+            start_pg $THIS
         fi
     fi
 else
-    initdb $PGDATA >& $PGDATA/postgres.log
-    postgres -k $PGDATA -D $PGDATA >& $PGDATA/postgres.log &
+    initdb -D $PGDATA >& /dev/null
+    start_pg $THIS
     sleep 5
-    createuser  revsysuser &&
+    createuser -ds  revsysuser &&
     createdb  -O revsysuser django &&
     createdb  $( whoami )
 fi
 
+if ! uwsgi_running;
+then
+    start_uwsgi
+fi
 
 [[ -f $V/set_prompt ]] && . $V/set_prompt
 
 [[ ! -d $H ]] && mkdir -p $H
+
+TMTHIS=$THIS
+PYVER=$( python --version 2>&1 |sed -Ee 's/^Python ([[:digit:].]+)\.[[:digit:]]$/\1/' )
+alias vpy='cd $VIRTUAL_ENV/lib/python${PYVER}/*-packages'
 
 #cd $H

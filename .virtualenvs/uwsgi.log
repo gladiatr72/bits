@@ -1,0 +1,21 @@
+*** Starting uWSGI 2.0.10 (64bit) on [Fri May 29 14:58:09 2015] ***
+compiled with version: 4.2.1 Compatible Apple LLVM 6.1.0 (clang-602.0.49) on 25 May 2015 15:30:01
+os: Darwin-14.3.0 Darwin Kernel Version 14.3.0: Mon Mar 23 11:59:05 PDT 2015; root:xnu-2782.20.48~5/RELEASE_X86_64
+nodename: lilbuddy-quatre.local
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 8
+current working directory: /Users/gladiatr/work/git/kellycreative
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /Users/gladiatr/work/git/
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 1064
+your memory page size is 4096 bytes
+detected max file descriptor number: 65536
+lock engine: OSX spinlocks
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /Users/gladiatr/work/git//.app.sock fd 3
+Python version: 2.7.9 (default, Jan  7 2015, 11:49:12)  [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.56)]
+Set PythonHome to /Users/gladiatr/.virtualenvs/
+ImportError: No module named site
