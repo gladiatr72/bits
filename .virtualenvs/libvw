@@ -19,7 +19,8 @@ start_uwsgi(){
 
     [[ -f ${H_}/.env ]] && . ${H}/.env 
 
-    uwsgi --virtualenv ${VENV} -s ${HSOCK_} --chdir ${H_} -w django_wsgi --pp bin >& ${VENV}/uwsgi.log &
+    uwsgi --pcre-jit --offload-threads 1 --threaded-logger --virtualenv ${VENV} -s ${HSOCK_} --chdir ${H_} -w ${THIS}.wsgi:application --enable-threads --workers 3 --py-auto-reload 2 >& $VENV/uwsgi.log &
+
     err=$?
     disown
     return $err
@@ -102,6 +103,25 @@ tmux(){
         args=$( echo $@ | sed -e 's/^.*tmux //' )
         cmd="${TMUXBIN} ${TMSOCK} ${args}"
         eval "$cmd"
+    fi
+}
+
+function setnodepath() {
+    [[ ! -n $ORIGINAL_PATH ]] &&
+        export ORIGINAL_PATH=$PATH ||
+        PATH=$ORIGINAL_PATH
+
+    if [[ -d $PWD/node_modules ]];
+    then
+        node_module_bin_paths=$( find node_modules -maxdepth 3 -type d -name "bin" )
+        PATH_PREFIX=""
+
+        for el in $node_module_bin_paths;
+        do
+            PATH_PREFIX="$PWD/$el:$PATH_PREFIX"
+        done
+
+        PATH=$PATH_PREFIX:$PATH
     fi
 }
 

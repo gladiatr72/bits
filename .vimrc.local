@@ -1,6 +1,54 @@
+"
+" Undo some ridiculousness perpetrated in .vimrc (I know... what I get for
+" using a plugin bundle)
+
+
+cunmap cwd
+cunmap cd.
+
+set clipboard=unnamed
+
+
+if $VIRTUAL_ENV == ''
+    let g:python_host_prog = '/usr/local/bin/python'
+else
+    let g:python_host_prog = $VIRTUAL_ENV . '/bin/python'
+endif
+
+if !has('nvim')
+    set ttymouse=xterm2
+    " left
+    nmap [D <C-w>h
+    " right
+    nmap [C <C-w>l
+    " up
+    nmap [A  <C-w>k
+    " down
+    nmap [B <C-w>j
+else
+    " let g:markdown_composer_browser = '/Applications/Firefox.app/Contents/MacOS/firefox'
+    let g:markdown_composer_browser = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+    let g:markdown_composer_browser = '/Users/gladiatr/bin/chrome'
+    let g:markdown_composer_syntax_theme = 'solarized_light'
+
+    nmap <Left> <C-w>h
+    nmap <Right> <C-w>l
+    nmap <Up> <C-w>k
+    nmap <Down> <C-w>j
+endif
+
+" allows cursor change in tmux mode
+if exists('$TMUX')
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
+
 nnoremap <f2> :set number! number?<cr>
 nnoremap <F3>  :set invpaste paste?<cr>
-
 
 set encoding=utf-8 " Necessary to show Unicode glyphs
 
@@ -9,7 +57,7 @@ let g:Powerline_symbols = 'fancy'
 " set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
 set guifont=Inconsolata-dz\ for\ Powerline:h18
 
-python import sys; sys.path.append('/usr/local/lib/python2.7/site-packages/')
+"python import sys; sys.path.append('/usr/local/lib/python2.7/site-packages/')
 "python from powerline.vim import setup as powerline_setup
 "python powerline_setup()
 "python del powerline_setup
@@ -20,7 +68,8 @@ let g:airline#extensions#tabline#enabled=1
 set showtabline=0 " Always display the tabline, even if there is only one tab
 set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
 
-let g:airline_theme='ubaryd'
+" let g:airline_theme='ubaryd'
+let g:ariline_theme='solarized dark'
 
 
 ""nmap <f12> :set invpaste paste?<cr>
@@ -47,7 +96,17 @@ set noautowrite
 nmap lb :set background=light<cr>
 nmap lbn :set background=dark<cr>
 
-let g:pymode_lint=0
+
+let g:easytags_async=1
+let g:easytags_resolve_links = 1
+let g:easytags_by_filetype=1
+let g:easytags_python_enabled=1
+
+if $H != ''
+	let g:easytags_file=$H . '/.vimtags'
+endif
+
+let g:pymode_lint=1
 "let g:loaded_modelines=1
 let g:acp_enableAtStartup = 1
 let g:spf13_no_omni_complete = 0
@@ -81,14 +140,15 @@ nmap <leader>8 <Plug>AirlineSelectTab8
 nmap <leader>9 <Plug>AirlineSelectTab9
 
 
+let g:tern#command=['/usr/local/bin/node', '/usr/local/bin/tern', '--no-port-file']
 
-
-
+let g:jsx_ext_required = 0
 
 
 " let g:syntastic_ignore_files = ['\.py$']
-" let g:syntastic_enable_python_checker = 1
-" let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_enable_python_checker = 1
+let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_javascript_checkers = ['eslint']
 " let g:syntastic_always_populate_loc_list = 0
 " let g:syntastic_auto_loc_list = 0
 " let g:syntastic_check_on_open = 0
@@ -106,50 +166,62 @@ nmap <leader>9 <Plug>AirlineSelectTab9
 " let g:pymode_rope_goto_definition_bind = "<C-]>"
 
 
-let g:pymode_lint_checkers = ['pylint']
+let g:pymode_lint_checkers = ['pyflakes']
 let g:pymode_lint_options_pylint = {'max-line-length': 100}
 
+let g:ycm_add_preview_to_completeopt=0
+let g:ycm_confirm_extra_conf=0
+set completeopt-=preview
 let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from Ctags file
 let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
 let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
 "let g:ycm_complete_in_comments = 1 " Completion in comments
-"let g:ycm_complete_in_strings = 1 " Completion in string
+let g:ycm_complete_in_strings = 1 " Completion in string
 
 "let g:eastytags_async = 1
-"let g:easytags_resolve_links = 1
 
-" left
-"nmap [1;5D <C-w>h
-nmap [D <C-w>h
-" right
-"nmap [1;5C <C-w>l
-nmap [C <C-w>l
-" up
-"nmap [1;5A  <C-w>k
-nmap [A  <C-w>k
-" down
-"nmap [1;5B <C-w>j
-nmap [B <C-w>j
+
 
 " move to top
-nmap [1;9A <C-w>K
+"nmap [1;9A <C-w>K
 " move down
-nmap [1;9B <C-w>J
+"nmap [1;9B <C-w>J
 " move left
-nmap [1;9D <C-w>H
+"nmap [1;9D <C-w>H
 " move right
-nmap [1;9C <C-w>L
+"nmap [1;9C <C-w>L
 
 set mouse=nvir
 set ttyfast
-set ttymouse=xterm2
+
+
 set colorcolumn=80
 
 nmap <F5> :GundoToggle<CR>
 
+let g:ycm_autoclose_preview_window_after_insertion=1
+autocmd FileType c nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<cr>
 
+set virtualedit=
 set nohlsearch
 set background=dark
 set title
 
 set wildignore=*.swp,*.pyc
+
+"" 
+" riv
+""
+
+let g:riv_global_leader='<F9>'
+
+
+""
+" vim-lua
+""
+
+let g:lua_complete_globals = 1
+let g:lua_complete_library = 1
+let g:lua_complete_dynamic = 1
+" let g:lua_complete_omni = 1
+ 

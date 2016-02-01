@@ -9,7 +9,10 @@ ps1update(){
     echo -ne "\033]0;${THIS}--${HOSTNAME%%.*}: ${PWD/#$HOME/~}\007"
 
     PS1="\n(\[\033[4;34m\]${THIS}\[\033[0m\])$STATUS${OPS1}"
+    setnodepath
+    [[ -f $PWD/.env ]] && . $PWD/.env
 }
+
 
 pgrunning && STATUS="postgres active" || STATUS=""
 export STATUS

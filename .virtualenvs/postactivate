@@ -58,17 +58,20 @@ else
     createdb  $( whoami )
 fi
 
-if ! uwsgi_running;
-then
-    start_uwsgi
-fi
+#if ! uwsgi_running;
+#then
+#    start_uwsgi
+#fi
 
 [[ -f $V/set_prompt ]] && . $V/set_prompt
 
 [[ ! -d $H ]] && mkdir -p $H
 
 TMTHIS=$THIS
-PYVER=$( python --version 2>&1 |sed -Ee 's/^Python ([[:digit:].]+)\.[[:digit:]]$/\1/' )
+PYVER=$( python --version 2>&1 |sed -Ee 's/^Python ([[:digit:].]+)\.[[:digit:]]{1,2}$/\1/' )
+
 alias vpy='cd $VIRTUAL_ENV/lib/python${PYVER}/*-packages'
+
+. $H/.env
 
 #cd $H
